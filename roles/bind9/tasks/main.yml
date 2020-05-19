@@ -1,0 +1,37 @@
+- name: "Installing Bind9"
+  apt: pkg=bind9 state=latest
+
+- name: "named.conf.options forwarders line 1"
+  replace:
+    dest: /etc/bind/named.conf.options
+    regexp: '// forwarders {'
+    replace: 'forwarders {' 
+
+- name: "named.conf.options forwarders line 2"
+  replace:
+    dest: /etc/bind/named.conf.options
+    regexp: '// 	0.0.0.0;'
+    replace: '8.8.8.8;'
+ 
+- name: "named.conf.options forwarders line 3"
+  replace:
+    dest: /etc/bind/named.conf.options
+    regexp: '// };'
+    replace: '};'
+
+
+
+
+- name: "Replace the named.conf.default-zones to remove the root zone hint"
+  copy:
+    src: named.conf.default-zones
+    dest: "/etc/bind/named.conf.default-zones"
+
+
+ 
+- name: "Restart Bind9"
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: bind9
+    enabled: yes

@@ -1,0 +1,15 @@
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto ens33
+iface ens33 inet dhcp
+
+auto ens34
+iface ens34 inet static
+address 172.16.0.1
+netmask 255.255.255.0
+

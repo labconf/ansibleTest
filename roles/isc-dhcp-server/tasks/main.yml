@@ -1,0 +1,42 @@
+- name: "Installing isc-dhcp-server"
+  apt: pkg=isc-dhcp-server state=latest
+
+- name: "Configure isc-dhcp-server to listen on ens34 only"
+  replace:
+    dest: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4=""'
+    replace: 'INTERFACESv4="ens34"' 
+
+
+- name: "option domain-name"
+  replace:
+    dest: /etc/dhcp/dhcpd.conf
+    regexp: '^option domain-name "example.org";'
+    replace: 'option domain-name "graeme.t301";' 
+
+- name: "option domain-name-servers"
+  replace:
+    dest: /etc/dhcp/dhcpd.conf
+    regexp: '^option domain-name-servers ns1.example.org, ns2.example.org;'
+    replace: 'option domain-name-servers 172.16.0.1;' 
+
+- name: "add subnet"
+  blockinfile:
+    dest:  /etc/dhcp/dhcpd.conf
+    block: |
+      subnet 172.16.0.0 netmask 255.255.255.0 {
+        range 172.16.0.100 172.16.0.199;
+        option routers 172.16.0.1;
+      }  
+
+
+
+- name: "Restart isc-dhcp-server"
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: isc-dhcp-server
+    enabled: yes
+
+
+

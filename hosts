@@ -1,0 +1,6 @@
+[ansible_servers]
+localhost ansible_connection=local ansible_user=root ansible_ssh_pass=password ansible_become_pass=password
+
+
+[gateways]
+server1 ansible_host=192.168.17.133 ansible_port=22 ansible_user=t301 ansible_ssh_pass=BadPassword ansible_become_pass=BadPassword
