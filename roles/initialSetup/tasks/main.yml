@@ -25,5 +25,16 @@
     name: ssh
     enabled: yes    
 
+- name: "Install requirements for managing Windows"
+  apt:
+    pkg: [ python-pip, git, libffi-dev, libssl-dev ]
+    state: latest
+
+- name: "Install pywinrm using pip"
+  pip:
+    name: pywinrm
+
+
+
 - debug:
     msg: "Setup complete, please reboot this system before running any further playbooks."

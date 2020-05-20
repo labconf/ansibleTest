@@ -4,3 +4,12 @@ localhost ansible_connection=local ansible_user=root ansible_ssh_pass=password a
 
 [gateways]
 server1 ansible_host=192.168.17.133 ansible_port=22 ansible_user=t301 ansible_ssh_pass=BadPassword ansible_become_pass=BadPassword
+
+[Windows]
+192.168.17.129
+
+[Windows:vars]
+ansible_user=lab
+ansible_password=Password1
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore

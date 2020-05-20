@@ -1,0 +1,47 @@
+- name: "Download PSTools to Ansible server"
+  get_url:
+    url: https://download.sysinternals.com/files/PSTools.zip
+    dest: "{{ role_path }}/files/PSTools.zip"
+    checksum: sha256:B9F404D4C7B6BF3A37746C66BCD014E75859D2FCF887B1DB527EC3ED2CCDEB30
+    force: no
+  delegate_to: localhost
+
+- name: "Download Chocolatey to Ansible server"
+  get_url:
+    url: https://chocolatey.org/install.ps1
+    dest: "{{ role_path }}/files/install.ps1"
+    #checksum: sha256:
+    force: no
+  delegate_to: localhost
+
+
+- name: "Create c:\temp"
+  win_file:
+    path: c:\temp
+    state: directory
+
+- name: "Upload PSTools file"
+  win_copy:
+    src: "{{ role_path }}/files/PSTools.zip"
+    dest: "c:/temp/PSTools.zip"
+
+- name: "Upload Chocolatey installer"
+  win_copy:
+    src: "{{ role_path }}/files/install.ps1"
+    dest: "c:/temp/install.ps1"
+
+- name: "Unzip PSTools"
+  win_unzip:
+    src: c:\temp\PSTools.zip
+    dest: c:\temp 
+
+- name: "Install chocolatey"
+  win_shell: powershell.exe -executionpolicy bypass -noninteractive c:\temp\install.ps1
+    
+- name: Reboot Windows
+  win_reboot:
+
+- name: Install firefox
+  win_chocolatey:
+    name: firefox
+    state: present
